@@ -18,7 +18,7 @@ const fieldShield = async(req,res,next) => {
     next()
 }
 
-//валидация
+//Валидация
 const formValidation = async (req,res,next) => {
     const {username,email,password} = req.body
 
@@ -38,7 +38,28 @@ const formValidation = async (req,res,next) => {
     next()
 }
 
+//Проверка кода
+const codeValidation = async (req,res,next) => {
+    let {code} = req.body
+
+    const payload = {
+        code:code
+    }
+
+    //экранирование
+    code = addSlashes(code)
+
+    const {error} = validationSchema.validate(payload)
+    //если валидация не прошла успешно
+    if (error) {
+        return res.status(400).json({message:error.details[0].message})
+    }
+
+    next()
+}
+
 module.exports = {
     fieldShield,
     formValidation,
+    codeValidation,
 }

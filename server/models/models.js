@@ -8,13 +8,16 @@ const User = sequelize.define('user', {
     role: {type: DataTypes.STRING, defaultValue: "USER"},
 })
 
-const Unverified = sequelize.define('user', {
+const Unverified = sequelize.define('unverified', {
     id: {type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true},
     username: {type: DataTypes.STRING, unique: true},
     email: {type: DataTypes.STRING, unique: true},
     role: {type: DataTypes.STRING, defaultValue: "USER"},
     code: {type: DataTypes.STRING},
-})
+    password: {type: DataTypes.STRING},
+    },
+    {paranoid:true}
+)
 
 const Password = sequelize.define('password', {
     id: {type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true},
@@ -23,15 +26,14 @@ const Password = sequelize.define('password', {
 
 const RegDates = sequelize.define('regdates', {
     id: {type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true},
-    regtime: {type: DataTypes.TIME},
-    regdate: {type: DataTypes.DATEONLY},
+    regdate: {type: DataTypes.DATE},
 })
 
 User.hasOne(Password)
-User.belongsTo(Password)
+Password.belongsTo(User)
 
 User.hasOne(RegDates)
-User.belongsTo(RegDates)
+RegDates.belongsTo(User)
 
 module.exports = {
     User,

@@ -14,8 +14,20 @@ const addSlashes = (field) => {
     return field
 }
 
-//функция для валидации формы
+//функция для генерации 6ти значного кода
+const generateCode = () => {
+    const str="ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789"
+    let result =""
+
+    for (let i = 0; i < 6; i++) {
+        let num = parseInt(Math.random()*str.length)
+        result = result + str.charAt(num)
+    }
+
+    return result
+}
 
 module.exports = {
     addSlashes,
+    generateCode,
 }
