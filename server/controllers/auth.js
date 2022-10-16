@@ -1,4 +1,4 @@
-const {User, Password, RegDates} = require('../models/models')
+const {User, Password, RegDates, Unverified} = require('../models/models')
 
 const registration = async (req, res) => {
 
