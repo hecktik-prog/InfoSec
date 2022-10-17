@@ -1,3 +1,5 @@
+const crypto = require('crypto')
+
 //функция для экранирования символов
 const addSlashes = (field) => {
 
@@ -27,7 +29,14 @@ const generateCode = () => {
     return result
 }
 
+//хеширование пароля
+const hash = (password) => {
+    const hashPassword = crypto.createHmac('sha256',process.env.SECRET).update(password).digest('hex')
+    return hashPassword
+}
+
 module.exports = {
     addSlashes,
     generateCode,
+    hash,
 }

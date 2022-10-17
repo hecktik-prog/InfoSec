@@ -1,7 +1,6 @@
-const {User, Password, RegDates, Unverified} = require('../models/models')
-const {generateCode} = require('../utils/utils')
+const {User, Password, RegDates, Unverified, Verified} = require('../models/models')
+const {generateCode, hash} = require('../utils/utils')
 const {Op} =require('sequelize')
-const crypto = require('crypto')
 
 const registration = async (req, res) => {
 
@@ -27,16 +26,17 @@ const registration = async (req, res) => {
     //отправка письма
 
     //Хеширование пароля
-    const hashPassword = crypto.createHmac('sha256',process.env.SECRET).update(password).digest('hex')
+    const hashPassword = hash(password)
 
     //Формирование даты удаления
     let deleteTime = new Date()
 
     //Очистка лишних записей
     await Unverified.destroy({where: {
-            deletedAt: {
-                [Op.lte] : deleteTime
-            }
+            [Op.or] : [
+                {deletedAt: deleteTime},
+                {username: username},
+            ]
         }, force:true
     })
 
@@ -56,10 +56,59 @@ const registration = async (req, res) => {
 }
 
 const login = async (req, res) => {
-    return res.json({message:'OK'})
+    const {username, password} = req.body
+
+    //проверка существования пользователя
+    const user = await User.findOne(
+        {
+            where: {username},
+            include: [
+                {model: Password, as: "password"}
+            ],
+        }
+    )
+
+    if (!user) {
+        return res.status(406).json({message: 'Введено неверное пользовательское имя.'})
+    }
+
+    //проверка пароля пользователя
+    const hashPassword = hash(password)
+
+    if (hashPassword !== user.password.password) {
+        return res.status(406).json({message: 'Пароль введён неверно.'})
+    }
+
+    //Генерация 6ти значного кода
+    let code = generateCode()
+
+    //отправка письма
+
+    //Формирование даты удаления
+    let deleteTime = new Date()
+    
+    //Очистка лишних записей
+    await Verified.destroy({where: {
+            [Op.or] : [
+                {deletedAt: deleteTime},
+                {username: username},
+            ]
+        }, force:true
+    })
+
+    deleteTime.setMinutes(deleteTime.getMinutes() + 3)
+
+    //Добавление во временную таблицу
+    await Verified.create({
+        username: user.username,
+        code: code,
+        deletedAt:deleteTime,
+    })
+
+    return res.json({ message:'Письмо отправлено.'})
 }
 
-const verification = async (req, res) => {
+const regVerification = async (req, res) => {
     const {code} = req.body
 
     //проверка кода - обязательно сначала выключить paranoid, иначе будет искать только там где deletedAt = NULL
@@ -68,7 +117,6 @@ const verification = async (req, res) => {
             [Op.eq] : code
         },
     }})
-    console.log(candidate)
 
     if (!candidate) {
         return res.status(406).json({message: 'Код введён неверно или устарел.'})
@@ -96,8 +144,25 @@ const verification = async (req, res) => {
     return res.status(200).json({message:'Аккаунт успешно создан.'})
 }
 
+const authVerification = async (req, res) => {
+    const {code} = req.body
+
+    const checker = await Verified.findOne({paranoid:false},{where: {
+        code: {
+            [Op.eq] : code
+        },
+    }})
+
+    if (!checker) {
+        return res.status(406).json({message: 'Код введён неверно или устарел.'})
+    }
+
+    return res.status(200).json({message:'Пользователь успешно зашел.'})
+}
+
 module.exports = {
     registration,
     login,
-    verification,
+    regVerification,
+    authVerification,
 }

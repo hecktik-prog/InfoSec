@@ -9,8 +9,10 @@ const fieldShield = async(req,res,next) => {
     username = addSlashes(username)
     req.body.username = username
 
-    email = addSlashes(email)
-    req.body.email = email
+    if (req.body.email) {
+        email = addSlashes(email)
+        req.body.email = email
+    }
 
     password = addSlashes(password)
     req.body.password = password
@@ -19,7 +21,7 @@ const fieldShield = async(req,res,next) => {
 }
 
 //Валидация
-const formValidation = async (req,res,next) => {
+const regValidation = async (req,res,next) => {
     const {username,email,password} = req.body
 
     const payload = {
@@ -27,6 +29,23 @@ const formValidation = async (req,res,next) => {
         email: email,
         password: password,
         confirmation_password: password,
+    }
+
+    const {error} = validationSchema.validate(payload)
+    //если валидация не прошла успешно
+    if (error) {
+        return res.status(400).json({message:error.details[0].message})
+    }
+
+    next()
+}
+
+const authValidation = async (req,res,next) => {
+    const {username,password} = req.body
+
+    const payload = {
+        username: username,
+        password: password,
     }
 
     const {error} = validationSchema.validate(payload)
@@ -60,6 +79,7 @@ const codeValidation = async (req,res,next) => {
 
 module.exports = {
     fieldShield,
-    formValidation,
+    regValidation,
+    authValidation,
     codeValidation,
 }
