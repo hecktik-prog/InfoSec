@@ -1,6 +1,6 @@
 const {User, Password, RegDates, Unverified, Verified} = require('../models/models')
 const {generateCode, hash} = require('../utils/utils')
-const {Op} =require('sequelize')
+const {Op} = require('sequelize')
 
 const registration = async (req, res) => {
 

@@ -31,8 +31,9 @@ const generateCode = () => {
 
 //хеширование пароля
 const hash = (password) => {
-    const hashPassword = crypto.createHmac('sha256',process.env.SECRET).update(password).digest('hex')
-    return hashPassword
+    const hashPassword = crypto.createHmac(process.env.ALGORITHM, process.env.SECRETSALT1).update(password).digest(process.env.TYPE)
+    const rehashPassword = crypto.createHmac(process.env.ALGORITHM, process.env.SECRETSALT2).update(hashPassword).digest(process.env.TYPE)
+    return rehashPassword
 }
 
 module.exports = {
