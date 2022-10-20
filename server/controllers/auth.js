@@ -160,9 +160,22 @@ const authVerification = async (req, res) => {
     return res.status(200).json({message:'Пользователь успешно зашел.'})
 }
 
+const test = async (req,res) => {
+    const {username, password} = req.body
+    let code = 'AF12D8'
+    return res.status(200).json({code: code, message:'Письмо отправлено.'})
+}
+
+const submitCode = async (req,res) => {
+    const {code} = req.body
+    return res.status(200).json({ message:'Регистрация успешна.'})
+}
+
 module.exports = {
     registration,
     login,
     regVerification,
     authVerification,
+    test,
+    submitCode,
 }

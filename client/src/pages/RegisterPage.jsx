@@ -1,8 +1,39 @@
-import React from 'react'
+import React, { useEffect } from 'react'
+import { useState } from 'react'
+import {useDispatch, useSelector} from 'react-redux'
+import { useNavigate } from 'react-router-dom'
 import {Container, Card, Form, Row, Button} from 'react-bootstrap'
 import { Link } from 'react-router-dom'
+import { registerUser } from '../redux/features/auth/authSlice'
 
 export const RegisterPage = () => {
+
+    const [username, setUsername] = useState('')
+    const [email, setEmail] = useState('')
+    const [password, setPassword] = useState('')
+
+    const {status} = useSelector((state) => state.auth)
+    const dispatch = useDispatch()
+    const navigate = useNavigate()
+
+    useEffect(() => {
+        if (status) {
+            navigate('/verification')
+        }
+    },[status, navigate])
+
+    const handleSubmit = () => {
+        try {
+            dispatch(registerUser({username,email,password}))
+
+            setUsername('')
+            setEmail('')
+            setPassword('')
+
+        } catch (error) {
+            console.log(error)
+        }
+    }
     return (
         <Container
             className="d-flex justify-content-center align-items-center"
@@ -31,6 +62,7 @@ export const RegisterPage = () => {
 
                         <Button
                             variant={"outline-success"}
+                            onClick={handleSubmit}
                         >
                             {'Регистрация'}
                         </Button>
