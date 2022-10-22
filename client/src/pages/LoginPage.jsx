@@ -17,7 +17,7 @@ export const LoginPage = () => {
 
     useEffect(() => {
         if (status) {
-            navigate('/verification')
+            navigate('/login/verification')
         }
     },[status, navigate])
 

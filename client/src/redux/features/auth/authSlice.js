@@ -14,7 +14,7 @@ export const loginUser = createAsyncThunk(
     'auth/loginUser',
     async ({username, password},{rejectWithValue}) => {
         try {
-            const {data} = await axios.post('/auth/test', {
+            const {data} = await axios.post('/auth/login', {
                 username,
                 password,
             })
@@ -30,7 +30,7 @@ export const registerUser = createAsyncThunk(
     'auth/registerUser',
     async ({username, email, password}, {rejectWithValue}) => {
         try {
-            const {data} = await axios.post('/auth/test', {
+            const {data} = await axios.post('/auth/registration', {
                 username,
                 email,
                 password})
@@ -44,11 +44,24 @@ export const registerUser = createAsyncThunk(
 
 )
 
-export const submitCode = createAsyncThunk(
-    'auth/submitCode',
+export const regSubmitCode = createAsyncThunk(
+    'auth/regSubmitCode',
     async ({code},{rejectWithValue}) => {
         try {
-            const {data} = await axios.post('/auth/submit', {code})
+            const {data} = await axios.post('/auth/registration/verification', {code})
+            return data
+
+        } catch (error) {
+            throw rejectWithValue(error.response.data.message)   
+        }
+    }
+)
+
+export const authSubmitCode = createAsyncThunk(
+    'auth/authSubmitCode',
+    async ({code},{rejectWithValue}) => {
+        try {
+            const {data} = await axios.post('/auth/login/verification', {code})
             return data
 
         } catch (error) {
@@ -77,15 +90,44 @@ export const authSlice = createSlice({
             state.status = false
         },
 
-        [submitCode.pending]: (state) => {
+        [registerUser.pending]: (state) => {
             state.isLoading = true
         },
-        [submitCode.fulfilled]: (state, action) => {
+        [registerUser.fulfilled]: (state, action) => {
+            state.isLoading = false
+            state.msg = action.payload.message
+            state.code = action.payload.code
+            state.status = true
+        },
+        [registerUser.rejected]: (state, action) => {
+            state.msg = action.payload
+            state.isLoading = false
+            state.status = false
+        },
+
+        [regSubmitCode.pending]: (state) => {
+            state.isLoading = true
+        },
+        [regSubmitCode.fulfilled]: (state, action) => {
             state.isLoading = false
             state.msg = action.payload.message
             state.submitted = true
         },
-        [submitCode.rejected]: (state, action) => {
+        [regSubmitCode.rejected]: (state, action) => {
+            state.msg = action.payload
+            state.isLoading = false
+            state.submitted = false
+        },
+
+        [authSubmitCode.pending]: (state) => {
+            state.isLoading = true
+        },
+        [authSubmitCode.fulfilled]: (state, action) => {
+            state.isLoading = false
+            state.msg = action.payload.message
+            state.submitted = true
+        },
+        [authSubmitCode.rejected]: (state, action) => {
             state.msg = action.payload
             state.isLoading = false
             state.submitted = false

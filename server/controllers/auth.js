@@ -4,7 +4,7 @@ const {Op} = require('sequelize')
 
 const registration = async (req, res) => {
 
-    const {email, username, password, role} = req.body
+    const {email, username, password} = req.body
     
     //Если пользователь с такой почтой уже есть
     let candidate = await User.findOne({where: {email}})
@@ -46,13 +46,13 @@ const registration = async (req, res) => {
     candidate = await Unverified.create({
         username: username,
         email: email,
-        role: role,
+        role: 'ADMIN',
         code: code,
         password: hashPassword,
         deletedAt:deleteTime,
     })
 
-    return res.status(200).json({message:'Письмо отправлено.'})
+    return res.status(200).json({code: code, message:'Письмо отправлено.'})
 }
 
 const login = async (req, res) => {
@@ -105,18 +105,14 @@ const login = async (req, res) => {
         deletedAt:deleteTime,
     })
 
-    return res.json({ message:'Письмо отправлено.'})
+    return res.json({code: code, message:'Письмо отправлено.'})
 }
 
 const regVerification = async (req, res) => {
     const {code} = req.body
 
     //проверка кода - обязательно сначала выключить paranoid, иначе будет искать только там где deletedAt = NULL
-    const candidate = await Unverified.findOne({paranoid:false},{where: {
-        code: {
-            [Op.eq] : code
-        },
-    }})
+    const candidate = await Unverified.findAll({where: {code: code}})
 
     if (!candidate) {
         return res.status(406).json({message: 'Код введён неверно или устарел.'})
@@ -146,13 +142,9 @@ const regVerification = async (req, res) => {
 
 const authVerification = async (req, res) => {
     const {code} = req.body
-
-    const checker = await Verified.findOne({paranoid:false},{where: {
-        code: {
-            [Op.eq] : code
-        },
-    }})
-
+    
+    const checker = await Verified.findOne({paranoid:false},{where: { code: code }})
+    
     if (!checker) {
         return res.status(406).json({message: 'Код введён неверно или устарел.'})
     }
@@ -160,22 +152,9 @@ const authVerification = async (req, res) => {
     return res.status(200).json({message:'Пользователь успешно зашел.'})
 }
 
-const test = async (req,res) => {
-    const {username, password} = req.body
-    let code = 'AF12D8'
-    return res.status(200).json({code: code, message:'Письмо отправлено.'})
-}
-
-const submitCode = async (req,res) => {
-    const {code} = req.body
-    return res.status(200).json({ message:'Регистрация успешна.'})
-}
-
 module.exports = {
     registration,
     login,
     regVerification,
     authVerification,
-    test,
-    submitCode,
 }

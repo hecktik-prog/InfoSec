@@ -4,9 +4,9 @@ import QrCode from 'react-qr-code'
 import { useState } from 'react'
 import {useDispatch, useSelector} from 'react-redux'
 import { useNavigate } from 'react-router-dom'
-import { submitCode } from '../redux/features/auth/authSlice'
+import { authSubmitCode } from '../redux/features/auth/authSlice'
 
-export const VerificationPage = () => {
+export const AuthVerificationPage = () => {
 
     const [code, setCode] = useState('')
     const {submitted} = useSelector((state) => state.auth)
@@ -22,7 +22,7 @@ export const VerificationPage = () => {
 
     const handleSubmitCode = () => {
         try {
-            dispatch(submitCode({code}))
+            dispatch(authSubmitCode({code}))
 
             setCode('')
 
@@ -46,10 +46,11 @@ export const VerificationPage = () => {
                         onChange={(e) => setCode(e.target.value)}
                     />
                     <div className="mt-3">
-                        <QrCode
+                        { submition ? <QrCode
                             className="mx-auto mt-20"
                             value={submition}
-                        />
+                        /> : <div></div>
+                        } 
                     </div>
                 </Form>
                 <Button

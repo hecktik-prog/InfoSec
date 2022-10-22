@@ -18,7 +18,7 @@ export const RegisterPage = () => {
 
     useEffect(() => {
         if (status) {
-            navigate('/verification')
+            navigate('/registration/verification')
         }
     },[status, navigate])
 
@@ -45,15 +45,21 @@ export const RegisterPage = () => {
                     <Form.Control
                         className="mt-3"
                         placeholder="Введите ваш username..."
+                        value={username}
+                        onChange = {(e) => setUsername(e.target.value)}
                     />
                     <Form.Control
                         className="mt-3"
                         placeholder="Введите ваш email..."
+                        value={email}
+                        onChange = {(e) => setEmail(e.target.value)}
                     />
                     <Form.Control
                         className="mt-3"
                         placeholder="Введите ваш пароль..."
                         type="password"
+                        value={password}
+                        onChange = {(e) => setPassword(e.target.value)}
                     />
                     <Row className="d-flex justify-content-between mt-3 pl-3 pr-3">
                         <div>
