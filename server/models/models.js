@@ -17,8 +17,8 @@ const Unverified = sequelize.define('unverified', {
         role: {type: DataTypes.STRING, defaultValue: "USER"},
         code: {type: DataTypes.STRING},
         password: {type: DataTypes.STRING},
-    },
-    {paranoid:true}
+        deleteTime: {type: DataTypes.DATE},
+    }
 )
 
 //Таблица для хранения кода авторизации
@@ -26,8 +26,8 @@ const Verified = sequelize.define('verified', {
         id: {type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true},
         username: {type: DataTypes.STRING},
         code: {type: DataTypes.STRING},
-    },
-    {paranoid:true}
+        deleteTime: {type: DataTypes.DATE},
+    }
 )
 
 //Пароль

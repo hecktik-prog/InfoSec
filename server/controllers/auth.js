@@ -23,8 +23,6 @@ const registration = async (req, res) => {
     //Генерация 6ти значного кода
     let code = generateCode()
 
-    //отправка письма
-
     //Хеширование пароля
     const hashPassword = hash(password)
 
@@ -34,8 +32,10 @@ const registration = async (req, res) => {
     //Очистка лишних записей
     await Unverified.destroy({where: {
             [Op.or] : [
-                {deletedAt: deleteTime},
-                {username: username},
+                {deleteTime: {
+                    [Op.lt]: deleteTime,
+                }},
+                {username:username}
             ]
         }, force:true
     })
@@ -49,7 +49,7 @@ const registration = async (req, res) => {
         role: 'ADMIN',
         code: code,
         password: hashPassword,
-        deletedAt:deleteTime,
+        deleteTime:deleteTime,
     })
 
     return res.status(200).json({code: code, message:'Письмо отправлено.'})
@@ -82,16 +82,16 @@ const login = async (req, res) => {
     //Генерация 6ти значного кода
     let code = generateCode()
 
-    //отправка письма
-
     //Формирование даты удаления
     let deleteTime = new Date()
     
     //Очистка лишних записей
     await Verified.destroy({where: {
             [Op.or] : [
-                {deletedAt: deleteTime},
-                {username: username},
+                {deleteTime: {
+                    [Op.lt]: deleteTime,
+                }},
+                {username:username}
             ]
         }, force:true
     })
@@ -102,7 +102,7 @@ const login = async (req, res) => {
     await Verified.create({
         username: user.username,
         code: code,
-        deletedAt:deleteTime,
+        deleteTime: deleteTime,
     })
 
     return res.json({code: code, message:'Письмо отправлено.'})
@@ -111,8 +111,14 @@ const login = async (req, res) => {
 const regVerification = async (req, res) => {
     const {code} = req.body
 
-    //проверка кода - обязательно сначала выключить paranoid, иначе будет искать только там где deletedAt = NULL
-    const candidate = await Unverified.findAll({where: {code: code}})
+    const data = new Date()
+
+    const candidate = await Unverified.findOne({where:{
+        [Op.and]:[{ code: code },
+        {deleteTime:{
+            [Op.gte]: data,
+        }}]
+    }})
 
     if (!candidate) {
         return res.status(406).json({message: 'Код введён неверно или устарел.'})
@@ -142,8 +148,13 @@ const regVerification = async (req, res) => {
 
 const authVerification = async (req, res) => {
     const {code} = req.body
-    
-    const checker = await Verified.findOne({paranoid:false},{where: { code: code }})
+    const data = new Date()
+    const checker = await Verified.findOne({where:{
+        [Op.and]:[{ code: code },
+        {deleteTime:{
+            [Op.gte]: data,
+        }}]
+    }})
     
     if (!checker) {
         return res.status(406).json({message: 'Код введён неверно или устарел.'})
