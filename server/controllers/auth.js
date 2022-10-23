@@ -52,7 +52,7 @@ const registration = async (req, res) => {
         deleteTime:deleteTime,
     })
 
-    return res.status(200).json({code: code, message:'Письмо отправлено.'})
+    return res.status(200).json({code: code, role: role, message:'Письмо отправлено.'})
 }
 
 const login = async (req, res) => {
@@ -105,7 +105,7 @@ const login = async (req, res) => {
         deleteTime: deleteTime,
     })
 
-    return res.json({code: code, message:'Письмо отправлено.'})
+    return res.json({code: code, role: user.role, message:'Письмо отправлено.'})
 }
 
 const regVerification = async (req, res) => {

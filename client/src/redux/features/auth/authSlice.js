@@ -5,7 +5,7 @@ const initialState = {
     isLoading: false,
     status: false,
     code: null,
-    username: null,
+    role: null,
     msg: null,
     submitted: false,
 }
@@ -83,6 +83,7 @@ export const authSlice = createSlice({
             state.msg = action.payload.message
             state.code = action.payload.code
             state.status = true
+            state.role = action.payload.role
         },
         [loginUser.rejected]: (state, action) => {
             state.msg = action.payload
@@ -98,6 +99,7 @@ export const authSlice = createSlice({
             state.msg = action.payload.message
             state.code = action.payload.code
             state.status = true
+            state.role = action.payload.role
         },
         [registerUser.rejected]: (state, action) => {
             state.msg = action.payload
