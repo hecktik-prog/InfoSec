@@ -4,6 +4,7 @@ const sequelize = require('./db')
 const models = require('./models/models')
 const cors = require('cors')
 const authRoute = require('./routes/auth')
+const userRoute = require('./routes/user')
 
 // Запуск приложения
 const app = express()
@@ -14,6 +15,7 @@ app.use(express.json())
 
 // Routes
 app.use('/api/auth',authRoute)
+app.use('/api/user',userRoute)
 
 async function start() {
     try {

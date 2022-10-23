@@ -1,6 +1,5 @@
 import React from 'react'
 import { AdminPage } from '../components/AdminPage'
-import { ModeratorPage } from '../components/ModeratorPage'
 import { UserPage } from '../components/UserPage'
 import {useSelector} from 'react-redux'
 import { useNavigate } from 'react-router-dom'
@@ -17,8 +16,7 @@ export const MainPage = () => {
         }
     }, [submitted,navigate])
 
-    const main_element = role === 'USER'? <UserPage/> :
-    (role === 'ADMIN'? <AdminPage/> : <ModeratorPage/>)
+    const main_element = role === 'USER'? <UserPage/> : <AdminPage/>
 
     return (
         <div>
