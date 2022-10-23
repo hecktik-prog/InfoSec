@@ -2,9 +2,21 @@ import React from 'react'
 import { AdminPage } from '../components/AdminPage'
 import { ModeratorPage } from '../components/ModeratorPage'
 import { UserPage } from '../components/UserPage'
+import {useSelector} from 'react-redux'
+import { useNavigate } from 'react-router-dom'
+import { useEffect } from 'react'
 
 export const MainPage = () => {
-    const role = 'MODER'
+    const {submitted, role} = useSelector((state) => state.auth)
+    const navigate = useNavigate()
+
+    //если пользователь не прошел 2FA, то переход на авторизацию
+    useEffect(() => {
+        if (!submitted) {
+            navigate('/login')
+        }
+    }, [submitted,navigate])
+
     const main_element = role === 'USER'? <UserPage/> :
     (role === 'ADMIN'? <AdminPage/> : <ModeratorPage/>)
 
