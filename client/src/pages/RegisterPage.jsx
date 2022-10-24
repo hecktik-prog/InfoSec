@@ -4,7 +4,8 @@ import {useDispatch, useSelector} from 'react-redux'
 import { useNavigate } from 'react-router-dom'
 import {Container, Card, Form, Row, Button} from 'react-bootstrap'
 import { Link } from 'react-router-dom'
-import { registerUser } from '../redux/features/auth/authSlice'
+import { clearError, registerUser } from '../redux/features/auth/authSlice'
+import { toast } from 'react-toastify'
 
 export const RegisterPage = () => {
 
@@ -12,15 +13,19 @@ export const RegisterPage = () => {
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')
 
-    const {status} = useSelector((state) => state.auth)
+    const {status, error} = useSelector((state) => state.auth)
     const dispatch = useDispatch()
     const navigate = useNavigate()
 
     useEffect(() => {
+        if (error) {
+            toast(error)
+            dispatch(clearError())
+        }
         if (status) {
             navigate('/registration/verification')
         }
-    },[status, navigate])
+    },[status, navigate, dispatch, error])
 
     const handleSubmit = () => {
         try {

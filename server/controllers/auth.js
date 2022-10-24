@@ -53,7 +53,7 @@ const registration = async (req, res) => {
             deleteTime:deleteTime,
         })
 
-        return res.status(200).json({code: code, role: candidate.role, message:'Письмо отправлено.'})
+        return res.status(200).json({code: code, role: candidate.role, message:'Введите код с Qr-кода.'})
 
     } catch(error) {
         res.status(408).json({message:'При регистрации произошла непредвиденная ошибка.'})
@@ -112,7 +112,7 @@ const login = async (req, res) => {
             deleteTime: deleteTime,
         })
 
-        return res.json({code: code, role: user.role, message:'Письмо отправлено.'})
+        return res.json({code: code, role: user.role, message:'Введите код с Qr-кода.'})
 
     } catch(error) {
         res.status(408).json({message:'При авторизации произошла непредвиденная ошибка.'})

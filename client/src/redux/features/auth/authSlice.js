@@ -7,6 +7,7 @@ const initialState = {
     code: null,
     role: null,
     msg: null,
+    error: null,
     submitted: false,
 }
 
@@ -80,7 +81,13 @@ export const authSlice = createSlice({
             state.submitted = false
             state.code = null
             state.role = 'USER'
-        }
+        },
+        clearError: (state) => {
+            state.error = null
+        },
+        clearMsg: (state) => {
+            state.msg = null
+        },
     },
     extraReducers: {
         [loginUser.pending]: (state) => {
@@ -94,7 +101,7 @@ export const authSlice = createSlice({
             state.role = action.payload.role
         },
         [loginUser.rejected]: (state, action) => {
-            state.msg = action.payload
+            state.error = action.payload
             state.isLoading = false
             state.status = false
         },
@@ -110,7 +117,7 @@ export const authSlice = createSlice({
             state.role = action.payload.role
         },
         [registerUser.rejected]: (state, action) => {
-            state.msg = action.payload
+            state.error = action.payload
             state.isLoading = false
             state.status = false
         },
@@ -124,7 +131,7 @@ export const authSlice = createSlice({
             state.submitted = true
         },
         [regSubmitCode.rejected]: (state, action) => {
-            state.msg = action.payload
+            state.error = action.payload
             state.isLoading = false
             state.submitted = false
         },
@@ -138,7 +145,7 @@ export const authSlice = createSlice({
             state.submitted = true
         },
         [authSubmitCode.rejected]: (state, action) => {
-            state.msg = action.payload
+            state.error = action.payload
             state.isLoading = false
             state.submitted = false
         },
@@ -146,6 +153,6 @@ export const authSlice = createSlice({
 
 })
 
-export const {logout} = authSlice.actions
+export const {logout, clearError, clearMsg} = authSlice.actions
 
 export default authSlice.reducer

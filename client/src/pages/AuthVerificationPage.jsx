@@ -4,21 +4,32 @@ import QrCode from 'react-qr-code'
 import { useState } from 'react'
 import {useDispatch, useSelector} from 'react-redux'
 import { useNavigate } from 'react-router-dom'
-import { authSubmitCode } from '../redux/features/auth/authSlice'
+import { authSubmitCode, clearError, clearMsg } from '../redux/features/auth/authSlice'
+import {toast} from 'react-toastify'
 
 export const AuthVerificationPage = () => {
 
     const [code, setCode] = useState('')
-    const {submitted} = useSelector((state) => state.auth)
+    const {submitted, msg, error} = useSelector((state) => state.auth)
     const submition = useSelector((state) => state.auth.code)
     const dispatch = useDispatch()
     const navigate = useNavigate()
 
     useEffect(() => {
+        if (msg) {
+            toast(msg)
+            dispatch(clearMsg())
+        }
+        
+        if (error) {
+            toast(error)
+            dispatch(clearError())
+        }
+
         if (submitted) {
             navigate('/')
         }
-    },[submitted, navigate])
+    },[submitted, navigate, msg, error, dispatch])
 
     const handleSubmitCode = () => {
         try {

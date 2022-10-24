@@ -5,6 +5,7 @@ import { useSelector, useDispatch } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
 import { Container, Button, Nav} from 'react-bootstrap'
 import { logout } from '../redux/features/auth/authSlice'
+import { toast } from 'react-toastify'
 
 export const NavBar = () => {
     const {submitted} = useSelector((state) => state.auth)
@@ -13,6 +14,7 @@ export const NavBar = () => {
 
     const logoutHandler = () => {
         dispatch(logout())
+        toast('Вы успешно вышли из своего аккаунта.')
     }
 
     return (
