@@ -2,7 +2,7 @@ const {addSlashes} = require('../utils/utils')
 const {validationSchema} = require('../utils/validationSchema')
 const Joi = require('joi')
 
-//экранирование 
+// Экранирование 
 const fieldShield = async(req,res,next) => {
     let {username,email,password} = req.body
 
@@ -20,7 +20,7 @@ const fieldShield = async(req,res,next) => {
     next()
 }
 
-//Валидация
+// Валидация
 const regValidation = async (req,res,next) => {
     const {username,email,password} = req.body
 
@@ -57,17 +57,17 @@ const authValidation = async (req,res,next) => {
     next()
 }
 
-//Проверка кода
+// Проверка кода
 const codeValidation = async (req,res,next) => {
     let {code} = req.body
-
-    const payload = {
-        code:code
-    }
 
     //экранирование
     code = addSlashes(code)
 
+    const payload = {
+        code:code
+    }
+    
     const {error} = validationSchema.validate(payload)
     //если валидация не прошла успешно
     if (error) {

@@ -14,14 +14,14 @@ const registration = async (req, res) => {
             return res.status(406).json({message: 'Пользователь с такой электронной почтой уже есть.'})
         }
 
-        //Если пользователь с таким юзернеймом уже есть
+        //Если пользователь с таким именем уже есть
         candidate = await User.findOne({where: {username}})
         
         if (candidate) {
             return res.status(406).json({message: 'Пользователь с таким пользовательским именем уже есть.'})
         }
 
-        //Генерация 6ти значного кода
+        //Генерация шестизначного кода подтверждения
         let code = generateCode()
 
         //Хеширование пароля
@@ -65,7 +65,7 @@ const login = async (req, res) => {
     try {
         const {username, password} = req.body
 
-        //проверка существования пользователя
+        //проверка на существование пользователя
         const user = await User.findOne(
             {
                 where: {username},
@@ -86,7 +86,7 @@ const login = async (req, res) => {
             return res.status(406).json({message: 'Пароль введён неверно.'})
         }
 
-        //Генерация 6ти значного кода
+        //Генерация шестизначного кода
         let code = generateCode()
 
         //Формирование даты удаления
@@ -125,6 +125,7 @@ const regVerification = async (req, res) => {
 
         const data = new Date()
 
+        //поиск введённого пользователем кода во временной таблице
         const candidate = await Unverified.findOne({where:{
             [Op.and]:[{ code: code },
             {deleteTime:{
@@ -166,6 +167,8 @@ const authVerification = async (req, res) => {
     try {
         const {code} = req.body
         const data = new Date()
+
+        //поиск кода во временной таблице для авторизации
         const checker = await Verified.findOne({where:{
             [Op.and]:[{ code: code },
             {deleteTime:{

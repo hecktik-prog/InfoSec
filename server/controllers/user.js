@@ -4,6 +4,7 @@ const getAllUsers = async (req, res) => {
     try {
         //получение всех пользователей
         const users = await User.findAll()
+        
         if (!users) {
             return res.status(406).json({message:'Пользователей нет.'})
         }
