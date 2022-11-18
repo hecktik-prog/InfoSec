@@ -16,6 +16,16 @@ const getAllUsers = async (req, res) => {
     }
 }
 
+const encodeText = async (req, res) => {
+
+}
+
+const decodeText = async (req, res) => {
+
+}
+
 module.exports = {
     getAllUsers,
+    encodeText,
+    decodeText,
 }
