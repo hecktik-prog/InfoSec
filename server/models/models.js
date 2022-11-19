@@ -42,11 +42,21 @@ const RegDates = sequelize.define('regdates', {
     regdate: {type: DataTypes.DATE},
 })
 
+//Тексты для зашифровки от пользователей
+const Message = sequelize.define('messages', {
+    id: {type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true},
+    usertext: {type: DataTypes.TEXT},
+    masterkey: {type: DataTypes.STRING},
+})
+
 User.hasOne(Password)
 Password.belongsTo(User)
 
 User.hasOne(RegDates)
 RegDates.belongsTo(User)
+
+User.hasOne(Message)
+Message.belongsTo(User)
 
 module.exports = {
     User,
@@ -54,4 +64,5 @@ module.exports = {
     RegDates,
     Unverified,
     Verified,
+    Message,
 }
