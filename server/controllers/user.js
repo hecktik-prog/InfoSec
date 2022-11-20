@@ -52,7 +52,6 @@ const encodeText = async (req, res) => {
 const decodeText = async (req, res) => {
     try {
         const {id} = req.body
-
         //проверка на существование записи
         const msg = await Message.findByPk(id)
         if (!msg) {

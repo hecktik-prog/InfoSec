@@ -12,14 +12,14 @@ export const MainPage = () => {
     const navigate = useNavigate()
 
     //если пользователь не прошел 2FA, то переход на авторизацию
-    useEffect(() => {
+    /*useEffect(() => {
         if (!submitted) {
             navigate('/login')
         }
-    }, [submitted,navigate])
+    }, [submitted,navigate])*/
 
-    const main_element = role === 'USER'? <UserPage/> : ('ADMIN' ? <AdminPage/>: ('CLIENT'? <ClientPage/>: <MasterPage/>))
-
+    //const main_element = role === 'USER'? <UserPage/> : ('ADMIN' ? <AdminPage/>: ('CLIENT'? <ClientPage/>: <MasterPage/>))
+    const main_element = <ClientPage/>
     return (
         <div>
             {main_element}
