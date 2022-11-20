@@ -80,8 +80,28 @@ const decodeText = async (req, res) => {
     }
 }
 
+const getAllTexts = async (req, res) => {
+    try {
+
+        //проверка на существование записей
+        const messages = await Message.findAll()
+
+        if (!messages) {
+             return res.status(406).json({
+                message:'Записей нет.'
+            })
+        }
+
+        return res.status(200).json({messages})
+
+    } catch (error) {
+        res.status(408).json({message:'Произошла непредвиденная ошибка.'})
+    }
+}
+
 module.exports = {
     getAllUsers,
     encodeText,
     decodeText,
+    getAllTexts,
 }
