@@ -55,9 +55,6 @@ Password.belongsTo(User)
 User.hasOne(RegDates)
 RegDates.belongsTo(User)
 
-User.hasOne(Message)
-Message.belongsTo(User)
-
 module.exports = {
     User,
     Password,
