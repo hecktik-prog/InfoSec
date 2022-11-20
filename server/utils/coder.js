@@ -389,20 +389,7 @@ function keyGeneration() {
     expandKeys(Buffer.from(masterkey))
 }
 
-/*function main() {
-    keyGeneration()
-    let string ="привет"
-    let encrypted = encrypt(Buffer.from(string))
-    let encrypted_hex = encrypted.toString('hex')
-    let comeback = Buffer.from(encrypted_hex, "hex")
-    let decrypted = decrypt(comeback).toString().split('\0').join('')
-
-    let str = masterKey.join(' ')
-    let test_key=str.split(' ').map((element)=>{
-       return Number(element)
-    })
-}*/
-
+/*                      EXPORT                    */
 const encryptUserText = (userString) => {
     //генерация итерационных ключей
     keyGeneration()
@@ -421,7 +408,7 @@ const decryptUserText = (masterkey, encryptedUserString) => {
     keyGenerationWithMasterkey(masterkey)
 
     //расшифровка
-    let decrypted = decrypt(comeback).toString().split('\0').join('')
+    let decrypted = decrypt(encryptedUserString).toString().split('\0').join('')
 
     return decrypted
 }

@@ -54,14 +54,24 @@ const decodeText = async (req, res) => {
         const {id} = req.body
 
         //проверка на существование записи
-        const msg = await Message.findByPk({id})
+        const msg = await Message.findByPk(id)
         if (!msg) {
              return res.status(406).json({
                 message:'Ошибка при выборе ключа.'
             })
         }
 
+        //подготовка к расшифровке
+        let masterkey = msg.masterkey
+        masterkey = masterkey.split(' ').map((element)=>{
+            return Number(element)
+        })
+        let encrypted = msg.usertext
+        encrypted = Buffer.from(encrypted, "hex")
+        let result = decryptUserText(masterkey, encrypted)
+
         return res.status(200).json({
+            result,
             message: 'Текст успешно расшифрован.'
         })
 
