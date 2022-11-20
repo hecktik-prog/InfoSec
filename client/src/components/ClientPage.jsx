@@ -21,21 +21,21 @@ export const ClientPage = () => {
     const getChoice = (choice) => {
         dispatch(decodeRecord({id:choice}))
     }
+
     return (
         <Container
             className="d-flex justify-content-center align-items-center"
-            style={{height: window.innerHeight - 54}}
+            style={{height: window.innerHeight+10}}
         >
             <Row className="flex-column m-3">
-                <h1 className='mt-3 text-left'>{'Все доступные записи:'}</h1>
                 <Row>
                     <Col><h3>Зашифрованный текст</h3></Col>
                     <Col><h3>Мастер-ключи</h3></Col> 
                 </Row>
                 {records.map((record, index) =>
                     <Row key={record.id} style={{background:index % 2 === 0 ? 'lightgray' : 'transparent', padding: 10}}>
-                        <Col>{record.usertext}</Col>
-                        <Col>{record.masterkey}</Col>
+                        <Col className='text-break'>{record.usertext}</Col>
+                        <Col className='text-break'>{record.masterkey.split(' ').join('')}</Col>
                     </Row>
                 )}
                 <h3>Выберите мастер-ключ:</h3>
@@ -44,15 +44,15 @@ export const ClientPage = () => {
                         <Dropdown.Toggle
                             variant={'secondary'}
                         >
-                            {"Выберите мастер ключ"}
+                            {"Выберите номер строки"}
                         </Dropdown.Toggle>
                         <Dropdown.Menu>
-                        {records.map((record) =>
+                        {records.map((record,index) =>
                             <Dropdown.Item
                                 key={record.id}
                                 onClick ={() => getChoice(record.id)}
                             >
-                                {record.masterkey}
+                                {`Строка № ${index+1}`}
                             </Dropdown.Item>
                         )}
                         </Dropdown.Menu>
@@ -61,7 +61,7 @@ export const ClientPage = () => {
 
                 <Form>
                     <Form.Control
-                        className="mt-3"
+                        className="mt-3 mb-5"
                         placeholder="Здесь будет расшифрованный текст..."
                         as="textarea"
                         rows={5}

@@ -23,13 +23,13 @@ const encodeText = async (req, res) => {
         let {text} = req.body
     
         //экранирование
-        text = addSlashes(text)
-
+        //text = addSlashes(text)
+        console.log(text)
         //шифрование
         let result = encryptUserText(text)
+        console.log(result)
         let encryptedText = result.pop()
         let masterkey = result.pop()
-        
         //приведение результатов в 16-ричный формат
         encryptedText = encryptedText.toString('hex')
         masterkey = masterkey.join(' ')

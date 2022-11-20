@@ -47,10 +47,27 @@ export const decodeRecord = createAsyncThunk(
     }
 )
 
+export const encodeRecord = createAsyncThunk(
+    'user/encodeRecord',
+    async({text}, {rejectWithValue}) => {
+        try {
+            const {data} = await axios.post('/user/encode',{text})
+            return data
+
+        } catch (error) {
+            throw rejectWithValue(error.response.data.message) 
+        }
+    }
+)
+
 export const userSlice = createSlice({
     name: 'user',
     initialState,
-    reducers: {},
+    reducers: {
+        clearMsg: (state) => {
+            state.msg = null
+        },
+    },
     extraReducers: {
         [getAllUsers.pending]: (state) => {
             state.isLoading = true
@@ -90,8 +107,22 @@ export const userSlice = createSlice({
             state.msg = action.payload
             state.isLoading = false
         },
+
+        [encodeRecord.pending]: (state) => {
+            state.isLoading = true
+        },
+        [encodeRecord.fulfilled]: (state, action) => {
+            state.isLoading = false
+            state.msg = action.payload.message
+        },
+        [encodeRecord.rejected]: (state, action) => {
+            state.msg = action.payload
+            state.isLoading = false
+        },
     },
 
 })
+
+export const {clearMsg} = userSlice.actions
 
 export default userSlice.reducer

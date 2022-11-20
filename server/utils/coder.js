@@ -375,6 +375,7 @@ const decrypt = (encryptedStr) => {
  * Генерация мастер-ключа и развертывание ключей
  */
 function keyGeneration() {
+    masterKey.length = 0
     for(let i = 0; i < 32; i=i+1){
         masterKey.push(Math.floor(Math.random() * 255))
     }
