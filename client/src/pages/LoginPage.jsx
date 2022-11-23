@@ -17,7 +17,7 @@ export const LoginPage = () => {
 
     useEffect(() => {
         if (error) {
-            toast(error)
+            toast.error(error)
             dispatch(clearError())
         }
         if (status) {

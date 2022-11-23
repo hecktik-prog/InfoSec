@@ -17,12 +17,12 @@ export const RegVerificationPage = () => {
 
     useEffect(() => {
         if (msg) {
-            toast(msg)
+            toast.success(msg)
             dispatch(clearMsg())
         }
         
         if (error) {
-            toast(error)
+            toast.error(error)
             dispatch(clearError())
         }
 

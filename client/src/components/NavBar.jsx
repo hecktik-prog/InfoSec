@@ -14,7 +14,7 @@ export const NavBar = () => {
 
     const logoutHandler = () => {
         dispatch(logout())
-        toast('Вы успешно вышли из своего аккаунта.')
+        toast.success('Вы успешно вышли из своего аккаунта.')
     }
 
     return (

@@ -19,7 +19,7 @@ export const RegisterPage = () => {
 
     useEffect(() => {
         if (error) {
-            toast(error)
+            toast.error(error)
             dispatch(clearError())
         }
         if (status) {

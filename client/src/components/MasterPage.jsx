@@ -17,7 +17,7 @@ export const MasterPage = () => {
 
     useEffect(() => {
         if (msg) {
-            toast(msg)
+            toast.success(msg)
             dispatch(clearMsg())
             setText('')
         }
