@@ -10,6 +10,7 @@ import { useEffect } from 'react'
 export const MainPage = () => {
     const {submitted, role} = useSelector((state) => state.auth)
     const navigate = useNavigate()
+    let main_element
 
     //если пользователь не прошел 2FA, то переход на авторизацию
     useEffect(() => {
@@ -18,8 +19,26 @@ export const MainPage = () => {
         }
     }, [submitted,navigate])
 
-    const main_element = (role === 'USER') ? <UserPage/> : ((role === 'ADMIN') ? <AdminPage/> : 
-    ((role === 'CLIENT') ? <ClientPage/>: <MasterPage/>))
+    switch (role) {
+        case 'USER':
+            main_element = <UserPage/>
+            break
+        
+        case 'ADMIN':
+            main_element = <AdminPage/>
+            break
+
+        case 'CLIENT':
+            main_element = <ClientPage/>
+            break
+
+        case 'MASTER':
+            main_element = <MasterPage/>
+            break
+
+        default:
+            break
+    }
 
     return (
         <div>
