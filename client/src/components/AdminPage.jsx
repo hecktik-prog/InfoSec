@@ -7,7 +7,6 @@ import { getAllUsers } from '../redux/features/user/userSlice'
 export const AdminPage = () => {
     const dispatch = useDispatch()
     const {users} = useSelector((state) => state.user)
-    console.log(users)
 
     useEffect(() => {
         dispatch(getAllUsers())

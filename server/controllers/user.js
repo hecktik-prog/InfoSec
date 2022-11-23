@@ -22,12 +22,8 @@ const encodeText = async (req, res) => {
     try {
         let {text} = req.body
     
-        //экранирование
-        //text = addSlashes(text)
-        console.log(text)
         //шифрование
         let result = encryptUserText(text)
-        console.log(result)
         let encryptedText = result.pop()
         let masterkey = result.pop()
         //приведение результатов в 16-ричный формат

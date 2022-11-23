@@ -18,7 +18,6 @@ export const MainPage = () => {
         }
     }, [submitted,navigate])
 
-    console.log(role)
     const main_element = (role === 'USER') ? <UserPage/> : ((role === 'ADMIN') ? <AdminPage/> : 
     ((role === 'CLIENT') ? <ClientPage/>: <MasterPage/>))
 

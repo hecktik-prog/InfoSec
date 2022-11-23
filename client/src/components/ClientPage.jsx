@@ -32,7 +32,11 @@ export const ClientPage = () => {
                     <Col><h3>Мастер-ключи</h3></Col> 
                 </Row>
                 {records.map((record, index) =>
-                    <Row key={record.id} style={{background:index % 2 === 0 ? 'lightgray' : 'transparent', padding: 10}}>
+                    <Row key={record.id} 
+                    style={{background:index % 2 === 0 ? 'lightgray' : 'transparent', 
+                            padding: 10,
+                            maxWidth:1000}}
+                >
                         <Col className='text-break'>{record.usertext}</Col>
                         <Col className='text-break'>{record.masterkey.split(' ').join('')}</Col>
                     </Row>

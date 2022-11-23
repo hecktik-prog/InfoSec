@@ -18,9 +18,10 @@ export const MasterPage = () => {
     useEffect(() => {
         if (msg) {
             toast(msg)
-            clearMsg()
+            dispatch(clearMsg())
+            setText('')
         }
-    }, [msg])
+    }, [msg, dispatch])
 
     return (
         <Container
