@@ -8,7 +8,7 @@ import { ToastContainer } from "react-toastify"
 const App = () => {
   return (
     <BrowserRouter>
-      <NavBar />
+      <NavBar/>
       <AppRouter />
       <ToastContainer position="bottom-right"/>
     </BrowserRouter>

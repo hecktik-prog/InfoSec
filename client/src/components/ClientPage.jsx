@@ -25,7 +25,6 @@ export const ClientPage = () => {
     return (
         <Container
             className="d-flex justify-content-center align-items-center"
-            style={{height: window.innerHeight+10}}
         >
             <Row className="flex-column m-3">
                 <Row>
